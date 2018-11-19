@@ -1,0 +1,12 @@
+v0.0.1
+- Styl siatki plytek
+- grafiki podstawowych plytek
+- dane plytek
+- dynamiczne rozszerzanie sie planszy
+- Stworzone ramy serwera
+- Funkcje zapisu i odczytu gry
+
+v0.0.2
+- Ladowanie wielkosci planszy
+- Ladowanie położynych plytek
+- Ladowanie następnej plytki

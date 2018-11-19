@@ -1,0 +1,83 @@
+.game-board
+{
+	
+}
+
+.game-row
+{
+	width: 100%;
+	height: 100px;
+}
+
+.game-tile
+{
+	
+	float: left;
+	width: 100px;
+	height: 100px;
+}
+
+.tile-possible-to-play:hover
+{
+	cursor: pointer;
+	background-color: grey;
+}
+.tile-possible-to-play
+{
+	width: 98px;
+	height: 98px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+
+}
+
+.game-current-tile
+{
+	position: fixed;
+	background-color: blue;
+	width: 200px;
+	height: 100px;
+	right: 1%;
+	bottom: 5%;
+}
+
+.game-players-list
+{
+	position: fixed;
+	width: 300px;
+	right: 1%;
+	top: 1%;
+
+}
+
+.game-player
+{
+	padding: 5px;
+	margin-bottom: 10px;
+	width: 288px;
+	border-width: 1px;
+	border-style: solid;
+}
+
+.player-is-active
+{
+	background-color: #EEEEEE;
+}
+
+.tile-rotated-top
+{
+	transform: rotate(0deg)
+}
+.tile-rotated-right
+{
+	transform: rotate(90deg)
+}
+.tile-rotated-bottom
+{
+	transform: rotate(180deg)
+}
+.tile-rotated-left
+{
+	transform: rotate(270deg)
+}
