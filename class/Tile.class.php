@@ -26,8 +26,14 @@ class Tile
 	{
 		$data['extension'] = $this->extension;
 		$data['skin'] = $this->skin;
+		$data['schema'] = $this->sides['a'].$this->sides['b'].$this->sides['c'].$this->sides['d'];
 		$data['sides'] = $this->sides['a'].$this->sides['b'].$this->sides['c'].$this->sides['d'];
 		$data['orienatation'] = $this->orienatation;
 		return $data;
+	}
+
+	public function setOrientation( $orienatation )
+	{
+		$this->orienatation = $orientation;
 	}
 }

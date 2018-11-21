@@ -2,6 +2,7 @@ class Tile
 {
 	constructor( data )
 	{
+		this.schema		= data.schema;
 		this.sides		= data.sides
 		this.skin		= data.skin;
 		this.extension	= data.extension;
@@ -13,18 +14,22 @@ class Tile
 		this.hook.removeClass('tile-rotated-top').removeClass('tile-rotated-right').removeClass('tile-rotated-bottom').removeClass('tile-rotated-left');
 		switch( side ) {
 		    case 'top':
+		    	this.schema = this.sides;
 		    	this.orienatation = side;
 		        this.hook.addClass('tile-rotated-top')
 		        break;
 		    case 'right':
+		    	this.schema = this.sides[3] + this.sides[0] + this.sides[1] + this.sides[2];
 		    	this.orienatation = side;
 		        this.hook.addClass('tile-rotated-right')
 		        break;
 		    case 'bottom':
+		    	this.schema = this.sides[2] + this.sides[3] + this.sides[0] + this.sides[1];
 		    	this.orienatation = side;
 		        this.hook.addClass('tile-rotated-bottom')
 		        break;
 		    case 'left':
+		    	this.schema = this.sides[1] + this.sides[2] + this.sides[3] + this.sides[0];
 		    	this.orienatation = side;
 		        this.hook.addClass('tile-rotated-left')
 		        break;
@@ -67,6 +72,7 @@ class Board
 	{
 		if( x != null && y != null)
 		{
+			if( this.ymin < y && y < this.ymax && this.xmin < x && x < this.xmax ) return;
 			if(x == this.xmax) this.xmax++;
 			if(x == this.xmin) this.xmin--;
 			if(y == this.ymax) this.ymax++;
@@ -100,7 +106,8 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
-					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
+					this.field[ xstr ][ ystr ]['schema'] = 'uuuu';
+					this.field[x][y].nextToTile = false;
 				}
 			}
 			for ( let x = 0 ; x >= this.xmin ; x-- ) 
@@ -118,7 +125,8 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
-					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
+					this.field[ xstr ][ ystr ]['schema'] = 'uuuu';
+					this.field[x][y].nextToTile = false;
 				}
 			}
 		}
@@ -144,7 +152,8 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
-					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
+					this.field[ xstr ][ ystr ]['schema'] = 'uuuu';
+					this.field[x][y].nextToTile = false;
 				}
 			}
 
@@ -163,7 +172,8 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
-					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
+					this.field[ xstr ][ ystr ]['schema'] = 'uuuu';
+					this.field[x][y].nextToTile = false;
 				}
 			}
 		}
@@ -171,32 +181,25 @@ class Board
 
 	findAvaliableFieldsForTile( tile )
 	{
-		// Ta funkcja na pewno się zdecydowanie zmieni
+		const CheckSchema = function( field, tile )
+		{
+			for (var i = 0; i < 4; i++) {
+				if( field[i] == 'u' || field[i] == tile[i] ) continue;
+				return false;
+			}
+			return true;
+		}
+
+
 		$( '.tile-possible-to-play' ).removeClass( 'tile-possible-to-play' );
 		for( let y = this.ymax ; y >= this.ymin ; y-- )
 		{
 			for( let x = this.xmin ; x <= this.xmax ; x++ )
 			{
-				if( ( typeof this.field[x][y].tile != 'object' )  &&
-					( 
-						( typeof this.field[x-1] != 'undefined' && typeof this.field[x-1][y] != 'undefined' && typeof this.field[x-1][y].tile == 'object' ) ||
-						( typeof this.field[x+1] != 'undefined' && typeof this.field[x+1][y] != 'undefined' && typeof this.field[x+1][y].tile == 'object' ) ||
-						( typeof this.field[x][y+1] != 'undefined' && typeof this.field[x][y+1].tile == 'object' ) ||
-						( typeof this.field[x][y-1] != 'undefined' && typeof this.field[x][y-1].tile == 'object' )
-					)
-				)
-				{
-
-
-
-					this.field[x][y].fieldHook.addClass('tile-possible-to-play');
-				}
-				else
-				{
-					continue;	
-				}
-
-
+				if( this.field[x][y].status == 'used' ) continue;
+				if( ! this.field[x][y].nextToTile ) continue;
+				if( ! CheckSchema( this.field[x][y].schema, tile.schema ) ) continue;
+				this.field[x][y].fieldHook.addClass('tile-possible-to-play');
 			}
 		}
 	}
@@ -208,6 +211,25 @@ class Board
 
 	pickTileToBoard( x, y, tile )
 	{
+		const updateSchema = function( side, field, tile )
+		{
+			switch( side )
+			{
+				case 'top':
+					return field[0] + field[1] + tile[0] + field[3];
+					break;
+				case 'right':
+					return field[0] + field[1] + field[2] + tile[1];
+					break;
+				case 'bottom':
+					return tile[2] + field[1] + field[2] + field[3];
+					break;
+				case 'left':
+					return field[0] + tile[3] + field[2] + field[3];
+					break;
+			}
+		}
+
 		this.field[ x ][ y ]['tile'] = new Tile( tile );
 		this.field[ x ][ y ]['fieldHook'].html( this.field[ x ][ y ]['tile'].getHTML() );
 		this.field[ x ][ y ]['tile'].hook = this.field[ x ][ y ]['fieldHook'].children( 'img' );
@@ -216,12 +238,17 @@ class Board
 
 		this.buildBoard( x, y );
 
-		this.field[ x ][ y ].sides = this.field[ x ][ y ].tile.sides;
+		this.field[x][y].schema = this.field[x][y].tile.schema;
 
-		// this.field[ x ][ y - 1 ].sides[0] = this.field[ x ][ y ].sides[2];
-		// this.field[ x ][ y ].sides[1] = this.field[ x ][ y ].sides[3];
-		// this.field[ x ][ y ].sides[2] = this.field[ x ][ y ].sides[0];
-		// this.field[ x ][ y ].sides[3] = this.field[ x ][ y ].sides[1];
+		this.field[x][y+1].schema = updateSchema( 'top',	this.field[x][y+1].schema, this.field[x][y].tile.schema );
+		this.field[x+1][y].schema = updateSchema( 'right',	this.field[x+1][y].schema, this.field[x][y].tile.schema );
+		this.field[x][y-1].schema = updateSchema( 'bottom',	this.field[x][y-1].schema, this.field[x][y].tile.schema );
+		this.field[x-1][y].schema = updateSchema( 'left',	this.field[x-1][y].schema, this.field[x][y].tile.schema );
+
+		this.field[x][y+1].nextToTile = true;
+		this.field[x+1][y].nextToTile = true;
+		this.field[x][y-1].nextToTile = true;
+		this.field[x-1][y].nextToTile = true;
 	}
 
 	highlightField( x, y, color )
@@ -253,6 +280,8 @@ class Core
 	 * Object players of Player
 	 * 
 	 * ref Player CurrentPlayer
+	 *
+	 * int currentFieldX, currentFieldY
 	*/ 
 
 	setCurrentTile( tileData )

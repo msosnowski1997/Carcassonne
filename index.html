@@ -18,8 +18,8 @@
 		<div class="game-players-list"></div>
 		<div class="game-current-tile">
 				<div class="current-tile"></div>
-				<!-- <button>ZATWIERDZ</button> -->
-				<!-- <button>PRZEKRĘĆ</button></span> -->
+				<button>ZATWIERDZ</button>
+				<button id="rotate" >PRZEKRĘĆ</button>
 			<span>
 		</div>
 		<h1><strong>Carcassonne <a href="changelog.txt"> Alpha </a></strong></h1>
@@ -35,7 +35,7 @@
 const game = new Core;
 // Ładowanie gry
 $.ajax({
-    url			: "http://localhost/Carcassonne/api.php", //wymagane, gdzie się łączymy
+    url			: "api.php", //wymagane, gdzie się łączymy
     method		: 'post', //typ połączenia, domyślnie get
     dataType	: 'json', //typ danych jakich oczekujemy w odpowiedzi
     data		: {
@@ -66,13 +66,13 @@ $( document ).on(
 		data['action'] = 'moveInfo';
 		data['moveInfo'] = {};
 		data['moveInfo']['type'] = 'setTile';
-		var x = data['moveInfo']['tileX'] = $(this).attr('position-x');
-		var y = data['moveInfo']['tileY'] = $(this).attr('position-y');
+		var x = data['moveInfo']['tileX'] = parseInt($(this).attr('position-x'), 10);
+		var y = data['moveInfo']['tileY'] = parseInt($(this).attr('position-y'), 10);
 		data['moveInfo']['orienatation'] = game.currentTile.orienatation;
 
 		let jsondata = JSON.stringify( data );
 		$.ajax({
-		    url			: "http://localhost/Carcassonne/api.php", //wymagane, gdzie się łączymy
+		    url			: "api.php", //wymagane, gdzie się łączymy
 		    method		: 'post', //typ połączenia, domyślnie get
 		    dataType	: 'json', //typ danych jakich oczekujemy w odpowiedzi
 		    data		: {

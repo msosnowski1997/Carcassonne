@@ -32,7 +32,6 @@ else
 
 if( isset($_POST['data']) )
 {
-	file_put_contents('save.tmp', $_POST['data']);
 	$request = json_decode($_POST['data'], true );
 	$game->parserequest( $request );
 	$game->sendAnswer();
