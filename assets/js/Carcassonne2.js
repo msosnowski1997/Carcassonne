@@ -1,13 +1,8 @@
 class Tile
 {
-
 	constructor( data )
 	{
-		this.sides = {};
-		this.sides.a	= data.sides.a;
-		this.sides.b	= data.sides.b;
-		this.sides.c	= data.sides.c;
-		this.sides.d	= data.sides.d;
+		this.sides		= data.sides
 		this.skin		= data.skin;
 		this.extension	= data.extension;
 		this.orienatation = data.orienatation; 
@@ -15,12 +10,30 @@ class Tile
 
 	rotate( side )
 	{
-		console.log('Nie stworzono funkcji');
+		this.hook.removeClass('tile-rotated-top').removeClass('tile-rotated-right').removeClass('tile-rotated-bottom').removeClass('tile-rotated-left');
+		switch( side ) {
+		    case 'top':
+		    	this.orienatation = side;
+		        this.hook.addClass('tile-rotated-top')
+		        break;
+		    case 'right':
+		    	this.orienatation = side;
+		        this.hook.addClass('tile-rotated-right')
+		        break;
+		    case 'bottom':
+		    	this.orienatation = side;
+		        this.hook.addClass('tile-rotated-bottom')
+		        break;
+		    case 'left':
+		    	this.orienatation = side;
+		        this.hook.addClass('tile-rotated-left')
+		        break;
+		}
 	}
 
 	getHTML()
 	{
-		return '<img src="assets/img/tiles/' + this.extension + '/' + this.skin + '.jpg" width="100px" height="100px">';
+		return '<img src="assets/img/tiles/' + this.extension + '/' + this.skin + '.jpg" width="98px" height="98px">';
 	}
 
 }
@@ -31,7 +44,7 @@ class Board
 	/* 
 	 * int ymin, ymax, xmin, xmax;
 	 * 
-	 * object fields[x][y] = { 'tile' : Tile, 'fieldHook' = jquery.hook }
+	 * object field[x][y] = { 'tile' : Tile, 'fieldHook' = jquery.hook, 'status' : string, 'sides' : string }
 	 * 
 	*/ 
 	constructor( data )
@@ -40,6 +53,7 @@ class Board
 		this.xmin = data.xmin;
 		this.ymax = data.ymax;
 		this.ymin = data.ymin;
+		this.field = {};
 		this.buildBoard();
 
 		for( const tile of data.tiles )
@@ -53,33 +67,32 @@ class Board
 	{
 		if( x != null && y != null)
 		{
-			if(x == xmax) this.xmax++;
-			if(x == xmin) this.xmin--;
-			if(y == ymax) this.ymax++;
-			if(y == ymin) this.ymin--;
+			if(x == this.xmax) this.xmax++;
+			if(x == this.xmin) this.xmin--;
+			if(y == this.ymax) this.ymax++;
+			if(y == this.ymin) this.ymin--;
 		}
 		const boardHook = $( '.game-board' );
 		const rowHTML = function( y ) { return '<div class="game-row" position-y=' + y + '></div>'; }
 		const rowHook = function( y ) { return $('.game-row[position-y=' + y + ']'); }
 		const fieldHTML = function( x, y ) { return '<div class="game-field" position-x=' + x + ' position-y=' + y + '></div>'; }
-		const fieldHook = function( x, y ) { return $( '.game-tile[position-x=' + x + '][position-y=' + y + ']' ); }
+		const fieldHook = function( x, y ) { return $( '.game-field[position-x=' + x + '][position-y=' + y + ']' ); }
 		const exist = function ( hook ) { return hook.length; }
 
 		for (let y = 1 ; y <= this.ymax ; y++ )
 		{
 
-			row = rowHook( y );
+			if( !exist( rowHook( y ) ) ) boardHook.prepend( rowHTML( y ) );
 
-			if( !exist( row ) ) boardHook.prepend( rowHTML( y ) );
+			let row = rowHook( y )
 
 			for ( let x = 1 ; x <= this.xmax ; x++ ) 
 			{
-
 				let field = fieldHook( x, y );
 
 				if( !exist( field ) )
 				{
-					row.prepend( fieldHTML( x, y ) ); 
+					row.append( fieldHTML( x, y ) ); 
 					let xstr = x.toString();
 					let ystr = y.toString();
 
@@ -87,6 +100,7 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
+					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
 				}
 			}
 			for ( let x = 0 ; x >= this.xmin ; x-- ) 
@@ -104,15 +118,16 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
+					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
 				}
 			}
 		}
 
 		for (let y = 0; y >= this.ymin ; y-- )
 		{
-			row = rowHook( y );
+			if( !exist( rowHook( y ) ) ) boardHook.append( rowHTML( y ) );
 
-			if( !exist( row ) ) boardHook.prepend( rowHTML( y ) );
+			let row = rowHook( y );
 
 			for ( let x = 1 ; x <= this.xmax ; x++ ) 
 			{
@@ -121,7 +136,7 @@ class Board
 
 				if( !exist( field ) )
 				{
-					row.prepend( fieldHTML( x, y ) ); 
+					row.append( fieldHTML( x, y ) ); 
 					let xstr = x.toString();
 					let ystr = y.toString();
 
@@ -129,6 +144,7 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
+					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
 				}
 			}
 
@@ -147,15 +163,42 @@ class Board
 
 					this.field[ xstr ][ ystr ] = {};
 					this.field[ xstr ][ ystr ]['fieldHook'] = fieldHook( x, y );
+					this.field[ xstr ][ ystr ]['sides'] = 'uuuu';
 				}
 			}
 		}
-
 	}
 
 	findAvaliableFieldsForTile( tile )
 	{
+		// Ta funkcja na pewno się zdecydowanie zmieni
+		$( '.tile-possible-to-play' ).removeClass( 'tile-possible-to-play' );
+		for( let y = this.ymax ; y >= this.ymin ; y-- )
+		{
+			for( let x = this.xmin ; x <= this.xmax ; x++ )
+			{
+				if( ( typeof this.field[x][y].tile != 'object' )  &&
+					( 
+						( typeof this.field[x-1] != 'undefined' && typeof this.field[x-1][y] != 'undefined' && typeof this.field[x-1][y].tile == 'object' ) ||
+						( typeof this.field[x+1] != 'undefined' && typeof this.field[x+1][y] != 'undefined' && typeof this.field[x+1][y].tile == 'object' ) ||
+						( typeof this.field[x][y+1] != 'undefined' && typeof this.field[x][y+1].tile == 'object' ) ||
+						( typeof this.field[x][y-1] != 'undefined' && typeof this.field[x][y-1].tile == 'object' )
+					)
+				)
+				{
 
+
+
+					this.field[x][y].fieldHook.addClass('tile-possible-to-play');
+				}
+				else
+				{
+					continue;	
+				}
+
+
+			}
+		}
 	}
 
 	showTileOnBoard()
@@ -165,10 +208,26 @@ class Board
 
 	pickTileToBoard( x, y, tile )
 	{
-		this.field[ x ][ y ]['tile'] = Object.assign( {}, tile );
-		this.field[ x ][ y ]['fieldHook'].html( '' ); // Trzeba dokończyć. Brak wczytywania obrazka i obrotu
+		this.field[ x ][ y ]['tile'] = new Tile( tile );
+		this.field[ x ][ y ]['fieldHook'].html( this.field[ x ][ y ]['tile'].getHTML() );
+		this.field[ x ][ y ]['tile'].hook = this.field[ x ][ y ]['fieldHook'].children( 'img' );
+		this.field[ x ][ y ]['tile'].rotate( this.field[ x ][ y ]['tile'].orienatation );
+		this.field[ x ][ y ]['status'] = 'used';
+
+		this.buildBoard( x, y );
+
+		this.field[ x ][ y ].sides = this.field[ x ][ y ].tile.sides;
+
+		// this.field[ x ][ y - 1 ].sides[0] = this.field[ x ][ y ].sides[2];
+		// this.field[ x ][ y ].sides[1] = this.field[ x ][ y ].sides[3];
+		// this.field[ x ][ y ].sides[2] = this.field[ x ][ y ].sides[0];
+		// this.field[ x ][ y ].sides[3] = this.field[ x ][ y ].sides[1];
 	}
 
+	highlightField( x, y, color )
+	{
+		this.field[x][y].fieldHook.addClass( 'is-highlighted' ).addClass( 'highlight-' + color );
+	}
 }
 
 
@@ -219,7 +278,6 @@ class Core
 
 	init( data )
 	{
-
 		this.setCurrentTile( data.currentTile );	
 		
 		this.board = new Board( data.board );

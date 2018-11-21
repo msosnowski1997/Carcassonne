@@ -56,7 +56,7 @@ class Core
 				// Wszystko co związanie z jedną kolejką gracza...
 				if( $this->board->setTile( $request['moveInfo']['tileX'], $request['moveInfo']['tileY'], $this->tilesCollection->getActualTile() ) )
 				{
-					$this->addToAnswer( 'nexttile', $this->tilesCollection->getRandomTile()->TileData() );
+					$this->addToAnswer( 'currentTile', $this->tilesCollection->getRandomTile()->TileData() );
 					$this->ChangeCurrentPlayer();
 					$this->addToAnswer( 'currentPlayer', $this->getCurrentPlayerInfo() );
 				}
@@ -71,7 +71,7 @@ class Core
 	public function getFullGameData()
 	{
 		$this->addToAnswer( 'GameInfo', [ 'id' => $this->gameID ] );
-		$this->addToAnswer( 'nexttile', $this->tilesCollection->getActualTile()->TileData() );
+		$this->addToAnswer( 'currentTile', $this->tilesCollection->getActualTile()->TileData() );
 		$this->addToAnswer( 'extensions', $this->extensions );
 		$this->addToAnswer( 'board', $this->board->getBoardInfo() );
 		$this->addToAnswer( 'players', $this->getPlayersInfo() );

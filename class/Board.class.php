@@ -13,19 +13,19 @@ class Board
 
 	public function getBoardInfo()
 	{
-		$toprow = 0;
-		$botrow = 0;
-		$leftcol = 0;
-		$rightcol = 0;
+		$ymax = 0;
+		$ymin = 0;
+		$xmin = 0;
+		$xmax = 0;
 		$tiles = array ();
 
 		foreach ($this->board as $x => $column) {
-			if( intval( $x ) >= $rightcol ) $rightcol = intval( $x );
-			if( intval( $x ) <= $leftcol ) $leftcol = intval( $x );
+			if( intval( $x ) >= $xmax ) $xmax = intval( $x );
+			if( intval( $x ) <= $xmin ) $xmin = intval( $x );
 
 			foreach ($column as $y => $tile) {
-				if( intval( $y ) >= $toprow ) $toprow = intval( $y );
-				if( intval( $y ) <= $botrow ) $botrow = intval( $y );
+				if( intval( $y ) >= $ymax ) $ymax = intval( $y );
+				if( intval( $y ) <= $ymin ) $ymin = intval( $y );
 				// dostęp do płytki;
 				// $this->board[$x][$y];
 				$tiles[] = [
@@ -35,10 +35,10 @@ class Board
 				];
 			}
 		}
-		$data['toprow'] = ++$toprow;
-		$data['botrow'] = --$botrow;
-		$data['leftcol'] = --$leftcol;
-		$data['rightcol'] = ++$rightcol;
+		$data['ymax'] = ++$ymax;
+		$data['ymin'] = --$ymin;
+		$data['xmin'] = --$xmin;
+		$data['xmax'] = ++$xmax;
 		$data['tiles'] = $tiles;
 
 		return $data;

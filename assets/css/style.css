@@ -1,6 +1,6 @@
 .game-board
 {
-	
+	overflow: auto;
 }
 
 .game-row
@@ -9,26 +9,25 @@
 	height: 100px;
 }
 
-.game-tile
+.game-field
 {
-	
+	background-color: #F7F7F7;
 	float: left;
-	width: 100px;
-	height: 100px;
+	width: 98px;
+	height: 98px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #FEFEFE;
 }
 
 .tile-possible-to-play:hover
 {
 	cursor: pointer;
-	background-color: grey;
+	background-color: #DDDDDD;
 }
 .tile-possible-to-play
 {
-	width: 98px;
-	height: 98px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: black;
+	background-color: #EEEEEE;
 
 }
 
@@ -80,4 +79,13 @@
 .tile-rotated-left
 {
 	transform: rotate(270deg)
+}
+
+.highlight-red
+{
+	border-color: red;
+}
+.highlight-black
+{
+	border-color: black;
 }

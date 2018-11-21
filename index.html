@@ -10,8 +10,8 @@
 		<link rel="Stylesheet" type="text/css" href="assets/css/style.css" />
 		<script src="assets/js/jquery.min.js"></script>
 		<script src="assets/js/functions.js"></script>
-		<script src="assets/js/Carcassonne.js"></script>
-		<title>Carcassonne Alpha 0.0.3</title>
+		<script src="assets/js/Carcassonne2.js"></script>
+		<title>Carcassonne Alpha</title>
 
 	</head>
 	<body>
@@ -22,7 +22,7 @@
 				<!-- <button>PRZEKRĘĆ</button></span> -->
 			<span>
 		</div>
-		<h1><strong>Carcassonne Alpha <a href="changelog.txt">v0.0.3</a></strong></h1>
+		<h1><strong>Carcassonne <a href="changelog.txt"> Alpha </a></strong></h1>
 
 		<div class="game-board"></div>
 <hr>
@@ -32,7 +32,7 @@
 <!-- Test temp scripts -->
 <script type="text/javascript">
 
-const game = new Game;
+const game = new Core;
 // Ładowanie gry
 $.ajax({
     url			: "http://localhost/Carcassonne/api.php", //wymagane, gdzie się łączymy
@@ -44,10 +44,9 @@ $.ajax({
 })
 .done( function( res ) 
 	{
-		console.log(res);
-
 		game.init( res );
 
+		game.board.findAvaliableFieldsForTile( game.currentTile );
 	}
 )
 .fail(function( xhr ) {
@@ -83,8 +82,9 @@ $( document ).on(
 		.done( function( res ) 
 			{
 				game.setActivePlayer( res.currentPlayer );
-				game.board.setTile( x, y, game.currentTile);
-				game.setCurrentTile( res.nexttile );
+				game.board.pickTileToBoard( x, y, game.currentTile);
+				game.setCurrentTile( res.currentTile );
+				game.board.findAvaliableFieldsForTile( game.currentTile );
 			}
 		)
 		.fail(function( xhr ) {

@@ -26,7 +26,7 @@ class Tile
 	{
 		$data['extension'] = $this->extension;
 		$data['skin'] = $this->skin;
-		$data['sides'] = $this->sides;
+		$data['sides'] = $this->sides['a'].$this->sides['b'].$this->sides['c'].$this->sides['d'];
 		$data['orienatation'] = $this->orienatation;
 		return $data;
 	}
