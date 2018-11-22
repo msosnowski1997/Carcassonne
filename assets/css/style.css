@@ -31,6 +31,17 @@
 
 }
 
+.field-possible-to-play:hover
+{
+	cursor: pointer;
+	background-color: #DDDDDD;
+}
+.field-possible-to-play
+{
+	background-color: #EEEEEE;
+
+}
+
 .game-current-tile
 {
 	position: fixed;

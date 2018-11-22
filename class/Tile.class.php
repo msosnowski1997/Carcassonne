@@ -8,7 +8,7 @@ class Tile
 
 	private $extension;
 
-	private $orienatation;
+	private $orientation;
 
 	public function __construct($data)
 	{
@@ -18,8 +18,7 @@ class Tile
 		$this->sides['c'] = $data[2];
 		$this->sides['d'] = $data[3];
 		$this->skin = $data[4];
-		$orienatations = ['top', 'bottom', 'left', 'right'];
-		$this->orienatation = $orienatations[ array_rand( $orienatations ) ];
+		$this->orientation = ( isset( $data['orienatation'] ) ) ? $data['orienatation'] : 'top';
 	}
 
 	public function TileData()
@@ -28,12 +27,17 @@ class Tile
 		$data['skin'] = $this->skin;
 		$data['schema'] = $this->sides['a'].$this->sides['b'].$this->sides['c'].$this->sides['d'];
 		$data['sides'] = $this->sides['a'].$this->sides['b'].$this->sides['c'].$this->sides['d'];
-		$data['orienatation'] = $this->orienatation;
+		$data['orienatation'] = $this->orientation;
+		$data['_extension'] = $this->extension;
+		$data['_skin'] = $this->skin;
+		$data['_pattern'] = $this->sides['a'].$this->sides['b'].$this->sides['c'].$this->sides['d'];
+		$data['_sides'] = $this->sides['a'].$this->sides['b'].$this->sides['c'].$this->sides['d'];
+		$data['_orientation'] = $this->orientation;
 		return $data;
 	}
 
-	public function setOrientation( $orienatation )
+	public function setOrientation( $orientation )
 	{
-		$this->orienatation = $orientation;
+		$this->orientation = $orientation;
 	}
 }

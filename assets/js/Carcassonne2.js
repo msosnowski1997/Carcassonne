@@ -90,7 +90,7 @@ class Board
 
 			if( !exist( rowHook( y ) ) ) boardHook.prepend( rowHTML( y ) );
 
-			let row = rowHook( y )
+			let row = rowHook( y );
 
 			for ( let x = 1 ; x <= this.xmax ; x++ ) 
 			{
@@ -273,25 +273,13 @@ class Player
 
 class Core
 {
-	/* Tile currentTile;
-	 * 
-	 * Board board;
-	 * 
-	 * Object players of Player
-	 * 
-	 * ref Player CurrentPlayer
-	 *
-	 * int currentFieldX, currentFieldY
-	*/ 
 
 	setCurrentTile( tileData )
 	{
-		// Tworzenie obiektu
+		
 		let tile = this.currentTile = new Tile( tileData );
 
-		let hook = $( '.current-tile' ).html( tile.getHTML() );
-		tile.hook = hook.children( 'img' );
-		tile.rotate( tile.orienatation );
+		$( '.current-tile' ).html( tile.getHTML() );
 	}
 
 	setActivePlayer( player )

@@ -54,6 +54,7 @@ class Core
 			
 			case 'moveInfo':
 				// Wszystko co związanie z jedną kolejką gracza...
+				$this->tilesCollection->getActualTile()->setOrientation( $request['moveInfo']['orientation'] );
 				if( $this->board->setTile( $request['moveInfo']['tileX'], $request['moveInfo']['tileY'], $this->tilesCollection->getActualTile() ) )
 				{
 					$this->addToAnswer( 'currentTile', $this->tilesCollection->getRandomTile()->TileData() );
