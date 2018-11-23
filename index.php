@@ -7,14 +7,14 @@
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
-		<link rel="Stylesheet" type="text/css" href="assets/css/style.css" />
+		<link rel="Stylesheet" type="text/css" href="assets/css/style.css?ver=<?php echo uniqid(); ?>" />
 		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/Carcassonne/functions.js"></script>
-		<script src="assets/js/Carcassonne/Tile.class.js"></script>
-		<script src="assets/js/Carcassonne/Field.class.js"></script>
-		<script src="assets/js/Carcassonne/Board.class.js"></script>
-		<script src="assets/js/Carcassonne/Player.class.js"></script>
-		<script src="assets/js/Carcassonne/Core.class.js"></script>
+		<script src="assets/js/Carcassonne/functions.js?ver=<?php echo uniqid(); ?>"></script>
+		<script src="assets/js/Carcassonne/Tile.class.js?ver=<?php echo uniqid(); ?>"></script>
+		<script src="assets/js/Carcassonne/Field.class.js?ver=<?php echo uniqid(); ?>"></script>
+		<script src="assets/js/Carcassonne/Board.class.js?ver=<?php echo uniqid(); ?>"></script>
+		<script src="assets/js/Carcassonne/Player.class.js?ver=<?php echo uniqid(); ?>"></script>
+		<script src="assets/js/Carcassonne/Core.class.js?ver=<?php echo uniqid(); ?>"></script>
 		<title>Carcassonne2 Alpha</title>
 
 	</head>

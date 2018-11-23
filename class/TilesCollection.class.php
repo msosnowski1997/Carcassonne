@@ -25,7 +25,7 @@ class TilesCollection
 					$tile['extension'] = $extension;
 					$this->tiles[] = new Tile($tile);
 				}
-				Dev::print( 'Wczytano dodatek: "'. $extension .'"' );
+				Dev::printIt( 'Wczytano dodatek: "'. $extension .'"' );
 			}
 		}
 	}
@@ -42,7 +42,7 @@ class TilesCollection
 		// Usuwanie płytki kolekcji dostępnych
 		unset( $this->tiles[ $random_key ] );
 
-		Dev::print('Pozostało: '. count($this->tiles) .' płytek');
+		Dev::printIt('Pozostało: '. count($this->tiles) .' płytek');
 
 		// Wysłanie płytki
 		return $return;

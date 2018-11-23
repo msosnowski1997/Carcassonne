@@ -3,14 +3,14 @@
 function autoLoader($class)
 {
 	require_once( 'class/'. $class .'.class.php' );
-	Dev::print( 'Wczytano klase "'. $class .'"' );
+	Dev::printIt( 'Wczytano klase "'. $class .'"' );
 }
 
 spl_autoload_register( 'autoLoader' );
 
 if( isset( $_GET['action'] ) && $_GET['action'] == 'newgame')
 {
-	Dev::print('Usuwanie zapisu gry');
+	Dev::printIt('Usuwanie zapisu gry');
 	unset($_SESSION['save']);
 }
 

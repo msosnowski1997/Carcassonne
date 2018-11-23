@@ -47,12 +47,12 @@ class TilesArray
 	{
 		if(array_key_exists( $extension, $this->tiles))
 		{
-			Dev::print('Wysłano dane płytek rozszerzenia: "'. $extension .'"');
+			Dev::printIt('Wysłano dane płytek rozszerzenia: "'. $extension .'"');
 			return $this->tiles[ $extension ];
 		}
 		else
 		{
-			Dev::print('Nie znaleziono danych płytek rozszerzenia: "'. $extension .'"');
+			Dev::printIt('Nie znaleziono danych płytek rozszerzenia: "'. $extension .'"');
 			return false;
 		}
 	}

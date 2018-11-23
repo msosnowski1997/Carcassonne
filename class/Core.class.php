@@ -78,7 +78,7 @@ class Core
 		$this->addToAnswer( 'players', $this->getPlayersInfo() );
 	}
 
-	public function addToAnswer( string $bucket, array $data )
+	public function addToAnswer( $bucket, array $data )
 	{
 		$this->answerData[$bucket] = $data;
 	}
@@ -138,7 +138,7 @@ class Core
 	public function __wakeup()
 	{
 		$this->answerData = array ();
-		Dev::print('Wczytano zapis gry');
+		Dev::printIt('Wczytano zapis gry');
 	}
 
 }
