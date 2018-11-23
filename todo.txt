@@ -1,5 +1,3 @@
-- obracanie plytek
-- znajdywanie odpowiedniego miejsca na plytke
 - refreshing
 - Prawdziwy system uzytkownikow
 - Szablon graficzny
@@ -30,6 +28,3 @@
 
 
 
-
-Mniej ważne:
-- przebudowa bard.boardbuild

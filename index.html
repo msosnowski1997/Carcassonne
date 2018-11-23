@@ -9,17 +9,21 @@
 		<meta http-equiv="Expires" content="0" />
 		<link rel="Stylesheet" type="text/css" href="assets/css/style.css" />
 		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/functions.js"></script>
-		<script src="assets/js/Carcassonne2.js"></script>
-		<title>Carcassonne Alpha</title>
+		<script src="assets/js/Carcassonne/functions.js"></script>
+		<script src="assets/js/Carcassonne/Tile.class.js"></script>
+		<script src="assets/js/Carcassonne/Field.class.js"></script>
+		<script src="assets/js/Carcassonne/Board.class.js"></script>
+		<script src="assets/js/Carcassonne/Player.class.js"></script>
+		<script src="assets/js/Carcassonne/Core.class.js"></script>
+		<title>Carcassonne2 Alpha</title>
 
 	</head>
 	<body>
 		<div class="game-players-list"></div>
 		<div class="game-current-tile">
 				<div class="current-tile"></div>
-				<button>ZATWIERDZ</button>
-				<button id="rotate" >PRZEKRĘĆ</button>
+				<button id="confrim" disabled="disabled">ZATWIERDZ</button>
+				<button id="rotate" disabled="disabled">PRZEKRĘĆ</button>
 			<span>
 		</div>
 		<h1><strong>Carcassonne <a href="changelog.txt"> Alpha </a></strong></h1>
@@ -45,8 +49,6 @@ $.ajax({
 .done( function( res ) 
 	{
 		game.init( res );
-
-		game.board.findAvaliableFieldsForTile( game.currentTile );
 	}
 )
 .fail(function( xhr ) {
@@ -59,16 +61,43 @@ $.ajax({
 // Wysyłanie swojego ruchu
 $( document ).on(
 	'click',
-	'.tile-possible-to-play',
+	'.field-possible-to-play',
+	function()
+	{
+
+		var x = parseInt($(this).attr('position-x'), 10);
+		var y = parseInt($(this).attr('position-y'), 10);
+		game._board.showTileOnBoard( x, y );
+		
+	}
+);
+
+
+
+$( document )
+.on(
+	'click', 
+	'button#rotate', 
+	function() 
+	{
+		let tile = Core.getCurrentTile();
+		tile._orientation = Core.currentOrientations[ tile._orientation ];
+		Core.getCurrentField().hook().html( tile.getHTML() );
+	}
+);
+
+$( document ).on(
+	'click',
+	'button#confrim',
 	function()
 	{
 		let data = {};
 		data['action'] = 'moveInfo';
 		data['moveInfo'] = {};
 		data['moveInfo']['type'] = 'setTile';
-		var x = data['moveInfo']['tileX'] = parseInt($(this).attr('position-x'), 10);
-		var y = data['moveInfo']['tileY'] = parseInt($(this).attr('position-y'), 10);
-		data['moveInfo']['orienatation'] = game.currentTile.orienatation;
+		var x = data['moveInfo']['tileX'] = Core.getCurrentField('x');
+		var y = data['moveInfo']['tileY'] = Core.getCurrentField('y');
+		data['moveInfo']['orientation'] = Core.getCurrentTile()._orientation;
 
 		let jsondata = JSON.stringify( data );
 		$.ajax({
@@ -81,10 +110,15 @@ $( document ).on(
 		})
 		.done( function( res ) 
 			{
+
+				Core.getCurrentField().hook().removeClass("highlight-black");
 				game.setActivePlayer( res.currentPlayer );
-				game.board.pickTileToBoard( x, y, game.currentTile);
-				game.setCurrentTile( res.currentTile );
-				game.board.findAvaliableFieldsForTile( game.currentTile );
+
+				game._board.pickTileToBoard( x, y, Core.getCurrentTile() );
+				Core.setCurrentTile( res.currentTile );
+				game._board.findAvaliableFieldsForTile( Core.getCurrentTile() );
+				$( 'button#rotate' ).attr("disabled","disabled");
+				$( 'button#confrim' ).attr("disabled","disabled");
 			}
 		)
 		.fail(function( xhr ) {
@@ -94,12 +128,6 @@ $( document ).on(
 
 	}
 );
-
-
-
-
-
-
 
 
 

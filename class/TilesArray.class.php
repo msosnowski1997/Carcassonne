@@ -29,8 +29,8 @@ class TilesArray
 		$this->tiles['classic'][] = array ('c', 'r', 'r', 'f', 'J');
 		$this->tiles['classic'][] = array ('c', 'f', 'r', 'r', 'K');
 		$this->tiles['classic'][] = array ('c', 'r', 'r', 'r', 'L');
-		$this->tiles['classic'][] = array ('c', 'f', 'f', 'c', 'M');
-		$this->tiles['classic'][] = array ('c', 'f', 'f', 'c', 'N');
+		$this->tiles['classic'][] = array ('c', 'c', 'f', 'f', 'M');
+		$this->tiles['classic'][] = array ('c', 'c', 'f', 'f', 'N');
 		$this->tiles['classic'][] = array ('c', 'r', 'r', 'c', 'O');
 		$this->tiles['classic'][] = array ('c', 'r', 'r', 'c', 'P');
 		$this->tiles['classic'][] = array ('c', 'c', 'f', 'c', 'Q');

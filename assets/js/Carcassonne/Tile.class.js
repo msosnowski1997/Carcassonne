@@ -37,7 +37,7 @@ class Tile
 
 	getHTML()
 	{
-		return '<img class="tile-rotated-' + this._orientation + '" src="assets/img/tiles/' + this._extension + '/' + this._skin + '.jpg" width="98px" height="98px">';
+		return '<img class="tile-rotated-' + this._orientation + '" src="assets/img/tiles/' + this._extension + '/' + this._skin + '.png" width="98px" height="98px">';
 	}
 
 	getPattern()
