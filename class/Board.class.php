@@ -1,17 +1,13 @@
 <?php
 
+namespace Games\Carcassonne;
+
 class Board
 {
-	private $board = array ();
+	// Informacje o płytkach na planszy
+	private $board;
 
-	private $tilesCollection;
-
-	public function __construct( TilesCollection $tilesCollection )
-	{
-		$this->tilesCollection = $tilesCollection;
-	}
-
-	public function getBoardInfo()
+	public function getInfo()
 	{
 		$ymax = 0;
 		$ymin = 0;
@@ -31,7 +27,7 @@ class Board
 				$tiles[] = [
 					'x' => $x,
 					'y' => $y,
-					'info' => $tile->TileData()
+					'info' => $tile->getInfo()
 				];
 			}
 		}
@@ -40,27 +36,44 @@ class Board
 		$data['xmin'] = --$xmin;
 		$data['xmax'] = ++$xmax;
 		$data['tiles'] = $tiles;
-
 		return $data;
 	}
 
-	public function setTile( $x, $y, $tile)
+	public function getTile( $x, $y )
 	{
+		return ( ! empty( $this->board[strval($x)][strval($y)] ) ) ? $this->board[strval($x)][strval($y)] : false;
+	}
 
-		// Sprawdzenie czy można ją tam ustawić...
-		$check = empty($this->board[strval($x)][strval($y)]);
-		// Ustawienie płytki
-		if($check)
+	public function setTile( $x, $y, $tile )
+	{
+		if( $this->isGood( $x, $y, $tile ) )
 		{
 			$this->board[strval($x)][strval($y)] = clone $tile;
 			return true;
 		}
-		else
-		{
-			return false;
-		}
-
-
-
+		return false;
 	}
+
+	private function isGood( $x, $y, $tile )
+	{
+		// Czy pole jest puste?
+		if( ! empty( $this->board[$x][$y] ) ) return false;
+
+		// Czy płytka pasuje do wzoru?
+
+		$fieldPattern  = ( $temp = $this->getTile( $x, $y+1 ) ) ? $temp->getPattern( 'bottom' ) : 'u'; 
+		$fieldPattern .= ( $temp = $this->getTile( $x+1, $y ) ) ? $temp->getPattern( 'left'	  ) : 'u'; 
+		$fieldPattern .= ( $temp = $this->getTile( $x, $y-1 ) ) ? $temp->getPattern( 'top'    ) : 'u'; 
+		$fieldPattern .= ( $temp = $this->getTile( $x-1, $y ) ) ? $temp->getPattern( 'right'  ) : 'u';
+		$tilePattern = $tile->getPattern( 'full' );
+
+		for ($i=0; $i < 4; $i++)
+		{ 
+			if( $fieldPattern[$i] == 'u' || $fieldPattern[$i] == $tilePattern[$i] ) continue;
+			return false; 	
+		} 
+
+		return true;
+	}
+
 }

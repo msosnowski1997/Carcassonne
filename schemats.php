@@ -1,5 +1,29 @@
 <?php
 
+
+// $num = 10;
+// $last = null;
+// $array = [ '\/', '\/', '\/', '\/', '\/', '\/', '<<<', '<<<', '>>>', '>>>' ];
+
+// for ($i=0; $i < 10; $i++) { 
+	
+// 	$key = array_rand( $array );
+// 	if( $array[$key] == '>>>' || $array[$key] == '<<<' )
+// 	{
+// 		if( $array[$key] == $last ) echo 'Powtorzenie!!!<br>';
+// 		$last = $array[$key];
+// 	}
+
+// 	echo $array[$key]. '<br>';
+// 	unset($array[$key]);
+// }
+
+
+
+
+
+// die;
+
 function show( string $title, array $array )
 {
 	echo ("<h3>". $title ."</h3>");
@@ -8,13 +32,10 @@ function show( string $title, array $array )
 }
 
 $tile = array ();
-
-$tile['pattern'] = 'frcc';
-$tile['orientation'] = 'bottom';
-$tile['extension'] = 'river';
-$tile['skin'] = 'BB6F3';
-$tile['properties']['haveGarden'] = 1;
-$tile['properties']['haveChurch'] = 0;
+$tile['amount'] = 4;
+$tile['info']['pattern'] = 'frcc';
+$tile['info']['extension'] = 'river';
+$tile['info']['type'] = 'BB6F3';
 
 
 $moveInfo = [
@@ -44,14 +65,36 @@ $loadRequest = [
 
 $loadResponse_with_move = [
 	'lastMoveID' => 16,
-	'moveType' => 'setTile',
-	'setTile' => [
-		'pos_x' => 13,
-		'pos_y' => -8,
-		'orienation' => 'left',
-		'pawn' => [
-			'type' => 'normal', // normal | big | abbot | pig | builder
-			'placeID' => 3
+	'movesList' => [
+		15 => [
+			'moveType' => 'setTile',
+			'setTile' => [
+				'tileData' => [
+
+				],
+				'pos_x' => 13,
+				'pos_y' => -8,
+				'orienation' => 'left',
+				'pawn' => [
+					'type' => 'normal', // normal | big | abbot | pig | builder
+					'placeID' => 3
+				]
+			]
+		],
+		16 => [
+			'moveType' => 'setTile',
+			'setTile' => [
+				'tileData' => [
+
+				],
+				'pos_x' => 4,
+				'pos_y' => 7,
+				'orienation' => 'top',
+				'pawn' => [
+					'type' => 'abbot', // normal | big | abbot | pig | builder
+					'placeID' => 3
+				]
+			]
 		]
 	]
 ];
@@ -60,11 +103,12 @@ $loadResponse_no_move = [
 	'lastMoveID' => 15
 ];
 
-
+show( 'Basic Tile Data', $tile );
 // show( 'Informacje o ruchu z klienta JS do serwera', $jsToServer );
+show( 'Move info from JS', $moveInfo );
 show( 'JSloadRequest', $loadRequest );
 show( 'JSloadResponse with-move', $loadResponse_with_move );
-show( 'JSloadResponse no-move', $loadResponse_no_move );
+// show( 'JSloadResponse no-move', $loadResponse_no_move );
 
 
 

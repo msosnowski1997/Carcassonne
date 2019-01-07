@@ -39,15 +39,16 @@
 const game = new Core;
 // Ładowanie gry
 $.ajax({
-    url			: "api.php", //wymagane, gdzie się łączymy
+    url			: "api.php<?php echo ( isset($_GET['id']) ) ? '?id='.$_GET['id'] : ''; ?>", //wymagane, gdzie się łączymy
     method		: 'post', //typ połączenia, domyślnie get
     dataType	: 'json', //typ danych jakich oczekujemy w odpowiedzi
     data		: {
-    	data	: '{"action":"getFullGameData"}' 
+    	data	: '{"type":"build"}' 
     }
 })
 .done( function( res ) 
 	{
+		console.log(res);
 		game.init( res );
 	}
 )
@@ -81,7 +82,7 @@ $( document )
 	function() 
 	{
 		let tile = Core.getCurrentTile();
-		tile._orientation = Core.currentOrientations[ tile._orientation ];
+		tile._direction = Core.currentOrientations[ tile._direction ];
 		Core.getCurrentField().hook().html( tile.getHTML() );
 	}
 );
@@ -91,17 +92,25 @@ $( document ).on(
 	'button#confrim',
 	function()
 	{
+		var x = Core.getCurrentField('x');
+		var y = Core.getCurrentField('y');
 		let data = {};
-		data['action'] = 'moveInfo';
-		data['moveInfo'] = {};
-		data['moveInfo']['type'] = 'setTile';
-		var x = data['moveInfo']['tileX'] = Core.getCurrentField('x');
-		var y = data['moveInfo']['tileY'] = Core.getCurrentField('y');
-		data['moveInfo']['orientation'] = Core.getCurrentTile()._orientation;
+		data = {
+			type : 'move',
+			move : {
+				moveType : 'setTile',
+				setTile : {
+					pos_x : x,
+					pos_y : y,
+					direction : Core.getCurrentTile()._direction
+				}
+			}
+
+		}
 
 		let jsondata = JSON.stringify( data );
 		$.ajax({
-		    url			: "api.php", //wymagane, gdzie się łączymy
+		    url			: "api.php<?php echo ( isset($_GET['id']) ) ? '?id='.$_GET['id'] : ''; ?>", //wymagane, gdzie się łączymy
 		    method		: 'post', //typ połączenia, domyślnie get
 		    dataType	: 'json', //typ danych jakich oczekujemy w odpowiedzi
 		    data		: {
@@ -110,9 +119,9 @@ $( document ).on(
 		})
 		.done( function( res ) 
 			{
-
+				
 				Core.getCurrentField().hook().removeClass("highlight-black");
-				game.setActivePlayer( res.currentPlayer );
+				game.setActivePlayer( res.currentPlayerIndex );
 
 				game._board.pickTileToBoard( x, y, Core.getCurrentTile() );
 				Core.setCurrentTile( res.currentTile );

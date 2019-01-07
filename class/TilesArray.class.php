@@ -1,5 +1,7 @@
 <?php
 
+namespace Games\Carcassonne;
+
 class TilesArray
 {
 	public static $instance;
@@ -17,44 +19,55 @@ class TilesArray
 
 	public function __construct()
 	{
-		$this->tiles['classic'][] = array ('f', 'f', 'r', 'f', 'A');
-		$this->tiles['classic'][] = array ('f', 'f', 'f', 'f', 'B');
-		$this->tiles['classic'][] = array ('c', 'c', 'c', 'c', 'C');
-		$this->tiles['classic'][] = array ('c', 'r', 'f', 'r', 'D');
-		$this->tiles['classic'][] = array ('c', 'f', 'f', 'f', 'E');
-		$this->tiles['classic'][] = array ('f', 'c', 'f', 'c', 'F');
-		$this->tiles['classic'][] = array ('f', 'c', 'f', 'c', 'G');
-		$this->tiles['classic'][] = array ('c', 'f', 'c', 'f', 'H');
-		$this->tiles['classic'][] = array ('c', 'f', 'f', 'c', 'I');
-		$this->tiles['classic'][] = array ('c', 'r', 'r', 'f', 'J');
-		$this->tiles['classic'][] = array ('c', 'f', 'r', 'r', 'K');
-		$this->tiles['classic'][] = array ('c', 'r', 'r', 'r', 'L');
-		$this->tiles['classic'][] = array ('c', 'c', 'f', 'f', 'M');
-		$this->tiles['classic'][] = array ('c', 'c', 'f', 'f', 'N');
-		$this->tiles['classic'][] = array ('c', 'r', 'r', 'c', 'O');
-		$this->tiles['classic'][] = array ('c', 'r', 'r', 'c', 'P');
-		$this->tiles['classic'][] = array ('c', 'c', 'f', 'c', 'Q');
-		$this->tiles['classic'][] = array ('c', 'c', 'f', 'c', 'R');
-		$this->tiles['classic'][] = array ('c', 'c', 'r', 'c', 'S');
-		$this->tiles['classic'][] = array ('c', 'c', 'r', 'c', 'T');
-		$this->tiles['classic'][] = array ('r', 'f', 'r', 'f', 'U');
-		$this->tiles['classic'][] = array ('f', 'f', 'r', 'r', 'V');
-		$this->tiles['classic'][] = array ('f', 'r', 'r', 'r', 'W');
-		$this->tiles['classic'][] = array ('r', 'r', 'r', 'r', 'X');
+		// Płytki z podstawowej wersji
+		$this->addTile( 'classic', 4, 'crfr', 'D' );
+		$this->addTile( 'classic', 2, 'ffrf', 'A' );
+		$this->addTile( 'classic', 4, 'ffff', 'B' );
+		$this->addTile( 'classic', 1, 'cccc', 'C' );
+		$this->addTile( 'classic', 5, 'cfff', 'E' );
+		$this->addTile( 'classic', 2, 'fcfc', 'F' );
+		$this->addTile( 'classic', 1, 'fcfc', 'G' );
+		$this->addTile( 'classic', 3, 'cfcf', 'H' );
+		$this->addTile( 'classic', 2, 'cffc', 'I' );
+		$this->addTile( 'classic', 3, 'crrf', 'J' );
+		$this->addTile( 'classic', 3, 'cfrr', 'K' );
+		$this->addTile( 'classic', 3, 'crrr', 'L' );
+		$this->addTile( 'classic', 2, 'ccff', 'M' );
+		$this->addTile( 'classic', 3, 'ccff', 'N' );
+		$this->addTile( 'classic', 2, 'crrc', 'O' );
+		$this->addTile( 'classic', 3, 'crrc', 'P' );
+		$this->addTile( 'classic', 1, 'ccfc', 'Q' );
+		$this->addTile( 'classic', 3, 'ccfc', 'R' );
+		$this->addTile( 'classic', 2, 'ccrc', 'S' );
+		$this->addTile( 'classic', 1, 'ccrc', 'T' );
+		$this->addTile( 'classic', 8, 'rfrf', 'U' );
+		$this->addTile( 'classic', 9, 'ffrr', 'V' );
+		$this->addTile( 'classic', 4, 'frrr', 'W' );
+		$this->addTile( 'classic', 1, 'rrrr', 'X' );
 	}
 
 	public function getTilesData( $extension )
 	{
 		if(array_key_exists( $extension, $this->tiles))
 		{
-			Dev::printIt('Wysłano dane płytek rozszerzenia: "'. $extension .'"');
 			return $this->tiles[ $extension ];
 		}
 		else
 		{
-			Dev::printIt('Nie znaleziono danych płytek rozszerzenia: "'. $extension .'"');
-			return false;
+			return array ();
 		}
+	}
+
+	private function addTile( $extension, $amount, $sides, $type )
+	{
+		$this->tiles[$extension][] = [
+			'amount' => $amount,
+			'info' => [
+				'sides' => $sides,
+				'extension' => $extension,
+				'type' => $type
+			]
+		];
 	}
 
 }

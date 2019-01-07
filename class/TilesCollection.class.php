@@ -1,55 +1,64 @@
 <?php
 
+namespace Games\Carcassonne;
+
 class TilesCollection
 {
-	
+	// Przechowuje nieużywane płytki
 	private $tiles = array ();
+
+	// Przechowuje aktualną płytkę
+	private $currentTile;
 	
-	private $usedTiles = array ();
-
-	private $actualTile;
-
-	public function __construct()
+	
+	public function __construct( array $extensions )
 	{
-		
-	}
-
-	public function addTiles( array $extensions )
-	{
-		foreach ($extensions as $extension) 
+		foreach ($extensions as $extension )
 		{
-			if($tilesData = TilesArray::instance()->getTilesData( $extension ))
+			// Pobranie danych o płytkach...
+			$tilesBasicData = TilesArray::instance()->getTilesData( $extension );
+
+			foreach ($tilesBasicData as $tileBasicData)
 			{
-				foreach ($tilesData as $tile) 
+				$this->tiles[$extension][] = new Tile( $tileBasicData['info'] );
+
+				if( $extension == 'classic' && empty($this->currentTile) )
 				{
-					$tile['extension'] = $extension;
-					$this->tiles[] = new Tile($tile);
+					$this->currentTile = $this->tiles['classic'][0];
 				}
-				Dev::printIt( 'Wczytano dodatek: "'. $extension .'"' );
+
+				
+
+				for ( $i=1; $i < $tileBasicData['amount']; $i++ )
+				{ 
+					$this->tiles[$extension][] = new Tile( $tileBasicData['info'] );
+				}
 			}
 		}
 	}
 
-	// Pobieranie losowej dostępnej płytki
-	public function getRandomTile()
+	public function getCurrentTile( $unset = false )
 	{
-		// Generowanie klucza dostępnej płytki
-		$random_key = array_rand($this->tiles);
-
-		// Kopiowanie obiektu płytki do tablicy zużytch i przypisanie jej do tymczasowej zmiennej
-		$return = $this->actualTile = clone $this->tiles[ $random_key ];
-
-		// Usuwanie płytki kolekcji dostępnych
-		unset( $this->tiles[ $random_key ] );
-
-		Dev::printIt('Pozostało: '. count($this->tiles) .' płytek');
-
-		// Wysłanie płytki
-		return $return;
+		if($unset) $this->setNextTile();
+		return $this->currentTile;
 	}
 
-	public function getActualTile()
+	private function setNextTile()
 	{
-		return $this->actualTile;
+		if( array_key_exists( 'river', $this->tiles ) )
+		{
+			$extension = 'river';
+			$key = array_rand( $this->tiles['river'] );
+		}
+		else
+		{
+			$extension = array_rand( $this->tiles );
+			$key = array_rand( $this->tiles[$extension] );
+		}
+		$this->currentTile = clone $this->tiles[$extension][$key];
+		unset( $this->tiles[$extension][$key] );
+		if( ! count( $this->tiles[$extension] ) ) unset( $this->tiles[$extension] );
 	}
+
+
 }

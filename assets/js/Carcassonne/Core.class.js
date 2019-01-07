@@ -1,10 +1,10 @@
 class Core
 {
-	setActivePlayer( player )
+	setActivePlayer( index )
 	{
-		this._currentPlayer = this._players[ player.index ];
+		this._currentPlayer = this._players[ index ];
 		$( '.game-player' ).removeClass('player-is-active');
-		$( '.game-player[player-index=' + player.index + '][player-id=' + player.id + ']' ).addClass('player-is-active');
+		$( '.game-player[player-index=' + index + ']' ).addClass('player-is-active');
 	}
 
 	/*------------------------------------------------------------------------------*/
@@ -13,26 +13,32 @@ class Core
 
 	init( data )
 	{
+		Core._moveID = data.lastMoveID;
+
 		Core.setCurrentTile( data.currentTile );
 
 		this._board = new Board( data.board );
 
-		this._players = {};
+		this._players = [];
 
 		for( const player of data.players.list )
 		{
-			this._players[ player.index ] = new Player( player );
+			console.log(player);
+			this._players.push( new Player( player ) );
 		}
 
-		this.setActivePlayer( this._players[ data.players.currentPlayer.index ] );
+		this.setActivePlayer( data.players.currentPlayerIndex );
 
 		this._board.findAvaliableFieldsForTile( Core.currentTile );
 	}
 
-	responseHandler()
-	{
-
-	}
+	// responseHandler( data )
+	// {
+	// 	switch(  )
+	// 	{
+			
+	// 	}
+	// }
 
 	addToRequest()
 	{
