@@ -1,66 +1,79 @@
 <?php
 
+namespace Games\Carcassonne;
+
 class Board
 {
-	private $board = array ();
+	// Informacje o płytkach na planszy
+	private $board;
 
-	private $tilesCollection;
-
-	public function __construct( TilesCollection $tilesCollection )
+	public function getInfo()
 	{
-		$this->tilesCollection = $tilesCollection;
-	}
-
-	public function getBoardInfo()
-	{
-		$toprow = 0;
-		$botrow = 0;
-		$leftcol = 0;
-		$rightcol = 0;
+		$ymax = 0;
+		$ymin = 0;
+		$xmin = 0;
+		$xmax = 0;
 		$tiles = array ();
 
 		foreach ($this->board as $x => $column) {
-			if( intval( $x ) >= $rightcol ) $rightcol = intval( $x );
-			if( intval( $x ) <= $leftcol ) $leftcol = intval( $x );
+			if( intval( $x ) >= $xmax ) $xmax = intval( $x );
+			if( intval( $x ) <= $xmin ) $xmin = intval( $x );
 
 			foreach ($column as $y => $tile) {
-				if( intval( $y ) >= $toprow ) $toprow = intval( $y );
-				if( intval( $y ) <= $botrow ) $botrow = intval( $y );
+				if( intval( $y ) >= $ymax ) $ymax = intval( $y );
+				if( intval( $y ) <= $ymin ) $ymin = intval( $y );
 				// dostęp do płytki;
 				// $this->board[$x][$y];
 				$tiles[] = [
 					'x' => $x,
 					'y' => $y,
-					'info' => $tile->TileData()
+					'info' => $tile->getInfo()
 				];
 			}
 		}
-		$data['toprow'] = ++$toprow;
-		$data['botrow'] = --$botrow;
-		$data['leftcol'] = --$leftcol;
-		$data['rightcol'] = ++$rightcol;
+		$data['ymax'] = ++$ymax;
+		$data['ymin'] = --$ymin;
+		$data['xmin'] = --$xmin;
+		$data['xmax'] = ++$xmax;
 		$data['tiles'] = $tiles;
-
 		return $data;
 	}
 
-	public function setTile( $x, $y, $tile)
+	public function getTile( $x, $y )
 	{
+		return ( ! empty( $this->board[strval($x)][strval($y)] ) ) ? $this->board[strval($x)][strval($y)] : false;
+	}
 
-		// Sprawdzenie czy można ją tam ustawić...
-		$check = empty($this->board[strval($x)][strval($y)]);
-		// Ustawienie płytki
-		if($check)
+	public function setTile( $x, $y, $tile )
+	{
+		if( $this->isGood( $x, $y, $tile ) )
 		{
 			$this->board[strval($x)][strval($y)] = clone $tile;
 			return true;
 		}
-		else
-		{
-			return false;
-		}
-
-
-
+		return false;
 	}
+
+	private function isGood( $x, $y, $tile )
+	{
+		// Czy pole jest puste?
+		if( ! empty( $this->board[$x][$y] ) ) return false;
+
+		// Czy płytka pasuje do wzoru?
+
+		$fieldPattern  = ( $temp = $this->getTile( $x, $y+1 ) ) ? $temp->getPattern( 'bottom' ) : 'u'; 
+		$fieldPattern .= ( $temp = $this->getTile( $x+1, $y ) ) ? $temp->getPattern( 'left'	  ) : 'u'; 
+		$fieldPattern .= ( $temp = $this->getTile( $x, $y-1 ) ) ? $temp->getPattern( 'top'    ) : 'u'; 
+		$fieldPattern .= ( $temp = $this->getTile( $x-1, $y ) ) ? $temp->getPattern( 'right'  ) : 'u';
+		$tilePattern = $tile->getPattern( 'full' );
+
+		for ($i=0; $i < 4; $i++)
+		{ 
+			if( $fieldPattern[$i] == 'u' || $fieldPattern[$i] == $tilePattern[$i] ) continue;
+			return false; 	
+		} 
+
+		return true;
+	}
+
 }

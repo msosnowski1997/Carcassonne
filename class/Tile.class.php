@@ -1,33 +1,79 @@
 <?php
 
+namespace Games\Carcassonne;
+
 class Tile
 {
-	private $sides;
+	// Typ płytki BB6F3 | D | FlugE | ...
+	private $type;
 
-	private $skin;
-
+	// Rozszerzenie z którego płytka pochodzi
 	private $extension;
 
-	private $orienatation;
+	// Podstawowy schemat płytki
+	private $sides;
 
-	public function __construct($data)
+	// Orientacja płytki top | right | left | bottom
+	private $direction;
+
+	public function __construct( $data )
 	{
-		$this->extension = $data['extension'];
-		$this->sides['a'] = $data[0];
-		$this->sides['b'] = $data[1];
-		$this->sides['c'] = $data[2];
-		$this->sides['d'] = $data[3];
-		$this->skin = $data[4];
-		$orienatations = ['top', 'bottom', 'left', 'right'];
-		$this->orienatation = $orienatations[ array_rand( $orienatations ) ];
+		$this->type =		$data['type'];
+		$this->extension =	$data['extension'];
+		$this->sides =		$data['sides'];
+		$this->direction =	'top';
 	}
 
-	public function TileData()
+	public function setDirection( $direction )
 	{
-		$data['extension'] = $this->extension;
-		$data['skin'] = $this->skin;
-		$data['sides'] = $this->sides;
-		$data['orienatation'] = $this->orienatation;
+		if( $direction == 'top' || $direction == 'right' || $direction == 'bottom' || $direction == 'left' ) $this->direction = $direction;
+	}
+
+	public function getInfo()
+	{
+		$data['_type'] = $this->type;
+		$data['_extension'] = $this->extension;
+		$data['_sides'] = $this->sides;
+		$data['_pattern'] = $this->sides;
+		$data['_direction'] = $this->direction;
 		return $data;
+	}
+
+
+	public function getPattern( $side = 'full' )
+	{
+		$pattern = "";
+		$temp = 0;
+		switch ( $this->direction ) {
+			case 'left':
+				$temp = 1;
+				break;
+			case 'bottom':
+				$temp = 2;
+				break;
+			case 'right':
+				$temp = 3;
+				break;
+		}
+
+		for ( $i = $temp; $i < $temp+4 ; $i++ )	$pattern .= $this->sides[$i % 4];
+
+		switch ( $side ) {
+			case 'top':
+				return $pattern[0];
+				break;
+			case 'right':
+				return $pattern[1];
+				break;
+			case 'bottom':
+				return $pattern[2];
+				break;
+			case 'left':
+				return $pattern[3];
+				break;
+			case 'full':
+				return $pattern;
+				break;
+		}
 	}
 }

@@ -1,5 +1,4 @@
-- obracanie plytek
-- znajdywanie odpowiedniego miejsca na plytke
+1. Podstawa
 - refreshing
 - Prawdziwy system uzytkownikow
 - Szablon graficzny
@@ -16,6 +15,30 @@
 
 
 
+2. Rzeka ( serwer i klient )
+ - laczenie plytek tylko przez rzeke
+3. Karczmy i katedry ( serwer )
+ - Dodawanie dodatkowych punktow za karczmy i katedry
+ - Nie dodawanie punktow za nieukonczone
+4. Kregi w zbozu ( Serwer i klient )
+ - Sciaganie lub dodawanie odpowiedniego pionka
+5. Kupcy i budowniczowie ( Serwer i klient )
+ - Dodawanie zetonow towarow do gracza
+ - Dodawanie punktow za zetony na koniec rozgrywki
+ - Mozliwosc postawienia budowniczego
+ - Efekt budowniczego
+6. Maszyny latajace ( serwer i klient )
+ - Postawienie pionka na dostawionym polu lub za pomoca maszyny latajacej
+7. Kurierzy (  )
+ - ...
+8. Promy (  )
+ - ...
+9. Kopalnie zlota (  )
+ - ...
+10. Mag i wiedzma (  )
+ - ...
+11. Bandyci (  )
+ - ...
 
 
 
@@ -28,8 +51,17 @@
 
 
 
+v x.x.x(version)
 
+Server:
+ - ...
+ - ...
 
+Client:
+ JS:
+  - ...
+  - ...
+ HTML&CSS
+  - ...
+  - ...
 
-Mniej ważne:
-- przebudowa bard.boardbuild
